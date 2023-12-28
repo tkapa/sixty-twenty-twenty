@@ -12,16 +12,59 @@
 
     <main>
         <!-- Form Inputs -->
-        <form action="#" method="">
-            <label>Monthly Income: <input name="mincome" type="number"/></label>            
-            <input type="submit" value="Calculate my budget"/>
-        </form>
+        <section id="income" >
+            <h2>Income</h2>
+            <form id="income-form">
+                <label>Monthly Income: 
+                    <input id="mincome" name="mincome" type="number" min="1" step="any"/>
+                </label>            
+                <input type="submit" value="Calculate my budget"/>
+            </form>
+        </section>
         
         <!-- Display Some Results-->
+        <section id="result">
+            <h2>Result</h2>
+            <dl>
+                <dt>Needs (60%)</dt>
+                <dd id="needs">$0.00</dd>
+                <dt>Wants (20%)</dt>
+                <dd id="wants">$0.00</dd>
+                <dt>Savings (20%)</dt>
+                <dd id="savings">$0.00</dd>
+            </dl>
+        </section>
     </main>
 
     <footer>
         Footer stuff
     </footer>
+
+    <script type="text/javascript">
+        const incomeForm = document.getElementById("income-form");
+        const needs = document.getElementById("needs");
+        const wants = document.getElementById("wants");
+        const savings = document.getElementById("savings");
+
+        incomeForm.addEventListener("submit", handleSubmit)
+
+        function handleSubmit (e) {
+            e.preventDefault();
+
+            const income = document.getElementById("mincome");
+
+            if (income.value === "") {
+                alert("Please input a value.")
+            }
+
+            needs.innerHTML = `$${calculatePct(income.value, 0.6)}`
+            wants.innerHTML = `$${calculatePct(income.value, 0.2)}`
+            savings.innerHTML = `$${calculatePct(income.value, 0.2)}`
+        }
+
+        function calculatePct (value, pct) {
+            return (value * pct).toFixed(2);
+        }
+    </script>
 </body>
 </html>
