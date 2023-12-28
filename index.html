@@ -17,7 +17,12 @@
             <form id="income-form">
                 <label>Monthly Income: 
                     <input id="mincome" name="mincome" type="number" min="1" step="any"/>
-                </label>            
+                </label>
+                <br>     
+                <label>Monthly Expenses: 
+                    <input id="mexpenses" name="mexpenses" type="number" min="0" step="any"/>
+                </label>
+                <br>  
                 <input type="submit" value="Calculate my budget"/>
             </form>
         </section>
@@ -25,14 +30,37 @@
         <!-- Display Some Results-->
         <section id="result">
             <h2>Result</h2>
-            <dl>
-                <dt>Needs (60%)</dt>
-                <dd id="needs">$0.00</dd>
-                <dt>Wants (20%)</dt>
-                <dd id="wants">$0.00</dd>
-                <dt>Savings (20%)</dt>
-                <dd id="savings">$0.00</dd>
-            </dl>
+            <section id="spread">
+                <h3>Your Monthly Spread</h3>
+                <dl>
+                    <dt><b>Needs</b> (60%)</dt>
+                    <dd id="needs">$0.00</dd>
+                    <dt><b>Wants</b> (20%)</dt>
+                    <dd id="wants">$0.00</dd>
+                    <dt><b>Savings</b> (20%)</dt>
+                    <dd id="savings">$0.00</dd>
+                </dl>
+            </section>
+            <section id="totals">
+                <h3>Potential Savings</h3>
+                <dl>
+                    <dt>
+                        <b>Monthly Extra</b><br>
+                        After bills you have (Needs - Monthly Bills)
+                        <dd id="extras">$0.00</dd>
+                    </dt>
+                    <dt>
+                        <b>Yearly Savings</b><br>
+                        In 12 months, you could save (Savings * 12)
+                    </dt>
+                    <dd id="year">$0.00</dd>
+                    <dt>
+                        <b>Yearly Total</b><br>
+                        With your extras, you could have (Yearly Savings + (Monthly Extra * 12))
+                    </dt>
+                    <dd id="total">$0.00</dd>
+                </dl>
+            </section>
         </section>
     </main>
 
@@ -45,25 +73,46 @@
         const needs = document.getElementById("needs");
         const wants = document.getElementById("wants");
         const savings = document.getElementById("savings");
+        const year = document.getElementById("year");  
+        const extras = document.getElementById("extras");          
+        const total = document.getElementById("total");          
 
         incomeForm.addEventListener("submit", handleSubmit)
 
         function handleSubmit (e) {
             e.preventDefault();
 
-            const income = document.getElementById("mincome");
+            const income = document.getElementById("mincome").value;
+            const bills = document.getElementById("mexpenses").value;
 
-            if (income.value === "") {
+            if (income === "" || bills === "") {
                 alert("Please input a value.")
             }
 
-            needs.innerHTML = `$${calculatePct(income.value, 0.6)}`
-            wants.innerHTML = `$${calculatePct(income.value, 0.2)}`
-            savings.innerHTML = `$${calculatePct(income.value, 0.2)}`
+            const forSaving = calculatePct(income, 0.2);
+            const forNeeds = calculatePct(income, 0.6);
+            const yearlySaving = calculateYrSaving(forSaving);
+            const extraSaving = (forNeeds - bills).toFixed(2);
+            const yearlyExtra = calculateYrSaving(extraSaving);
+
+            needs.innerHTML = `$${forNeeds}`
+            wants.innerHTML = `$${calculatePct(income, 0.2)}`
+            savings.innerHTML = `$${forSaving}`
+            year.innerHTML = `$${yearlySaving}`
+            extras.innerHTML = `$${extraSaving}`
+            total.innerHTML = `$${addStringsAsNumber(yearlySaving, yearlyExtra)}`
         }
 
         function calculatePct (value, pct) {
             return (value * pct).toFixed(2);
+        }
+
+        function calculateYrSaving (monthly) {
+            return (monthly * 12).toFixed(2);
+        }
+
+        function addStringsAsNumber (a, b) {
+            return (Number(a) + Number(b)).toFixed(2);
         }
     </script>
 </body>
