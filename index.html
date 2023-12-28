@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="public/index.css">
     <title>Sixty Twenty Twenty</title>
 </head>
 <body>
@@ -10,20 +11,22 @@
         <h1>Sixty Twenty Twenty</h1>
     </header>
 
-    <main>
+    <main class="content">
         <!-- Form Inputs -->
         <section id="income" >
             <h2>Income</h2>
             <form id="income-form">
-                <label>Monthly Income: 
-                    <input id="mincome" name="mincome" type="number" min="1" step="any"/>
+                <label class="form-label">Monthly Income: 
+                    <input id="mincome" name="mincome" type="number" min="1" step="any" value="0.00"/>
                 </label>
                 <br>     
-                <label>Monthly Expenses: 
-                    <input id="mexpenses" name="mexpenses" type="number" min="0" step="any"/>
+                <label class="form-label">Monthly Expenses: 
+                    <input id="mexpenses" name="mexpenses" type="number" min="0" step="any" value="0.00"/>
                 </label>
                 <br>  
-                <input type="submit" value="Calculate my budget"/>
+                <div class="submit-button">
+                    <input type="submit" value="Calculate my budget"/>
+                </div>
             </form>
         </section>
         
